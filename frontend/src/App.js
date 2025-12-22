@@ -3,6 +3,7 @@ import UserList from './components/UserList';
 import UserForm from './components/UserForm';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Toast from './components/Toast';
 import { Card, CardContent } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Plus } from 'lucide-react';
@@ -11,6 +12,7 @@ function App() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [refresh, setRefresh] = useState(0);
+    const [toast, setToast] = useState({ message: '', type: '', isVisible: false });
 
     const handleEdit = (user) => {
         setSelectedUser(user);
@@ -26,6 +28,7 @@ function App() {
         setShowForm(false);
         setSelectedUser(null);
         setRefresh(refresh + 1);
+        showToast(selectedUser ? 'Cập nhật user thành công!' : 'Thêm user thành công!', 'success');
     };
 
     const handleCancel = () => {
@@ -35,6 +38,19 @@ function App() {
 
     const handleRefresh = () => {
         setRefresh(refresh + 1);
+    };
+
+    const handleDelete = () => {
+        showToast('Xóa user thành công!', 'success');
+        setRefresh(refresh + 1);
+    };
+
+    const showToast = (message, type) => {
+        setToast({ message, type, isVisible: true });
+    };
+
+    const hideToast = () => {
+        setToast(prev => ({ ...prev, isVisible: false }));
     };
 
     return (
@@ -48,6 +64,7 @@ function App() {
                             <UserList 
                                 onEdit={handleEdit}
                                 onRefresh={handleRefresh}
+                                onDelete={handleDelete}
                                 refresh={refresh}
                             />
                         </div>
@@ -72,6 +89,13 @@ function App() {
                     </div>
                 </div>
             </main>
+            
+            <Toast
+                message={toast.message}
+                type={toast.type}
+                isVisible={toast.isVisible}
+                onClose={hideToast}
+            />
             
             <Footer />
         </div>

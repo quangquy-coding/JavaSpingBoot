@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import ImageModal from "./ImageModal";
 
-const UserList = ({ onEdit, onRefresh, refresh }) => {
+const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
   const [users, setUsers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState({ src: '', name: '' });
@@ -33,7 +33,7 @@ const UserList = ({ onEdit, onRefresh, refresh }) => {
     if (window.confirm("Bạn có chắc muốn xóa user này?")) {
       UserService.deleteUser(id)
         .then(() => {
-          onRefresh();
+          onDelete();
         })
         .catch((error) => {
           console.error("Error deleting user:", error);
