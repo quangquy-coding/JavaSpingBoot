@@ -4,24 +4,33 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import ImageModal from "./ImageModal";
+import Pagination from "./Pagination";
 
 const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
   const [users, setUsers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState({ src: '', name: '' });
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize] = useState(5);
 
   useEffect(() => {
     loadUsers();
-  }, [refresh]);
+  }, [refresh, currentPage]);
 
   const loadUsers = () => {
-    UserService.getAllUsers()
+    UserService.getAllUsers(currentPage, pageSize)
       .then((response) => {
-        setUsers(response.data);
+        setUsers(response.data.content);
+        setTotalPages(response.data.totalPages);
       })
       .catch((error) => {
         console.error("Error loading users:", error);
       });
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const deleteUser = (id) => {
@@ -73,7 +82,7 @@ const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users && users.length > 0 ? users.map((user) => (
                 <tr key={user.id} className="border-b hover:bg-gray-50">
                   <td className="p-4">
                     <img 
@@ -111,11 +120,25 @@ const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan="6" className="p-4 text-center text-gray-500">
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              )}}
             </tbody>
           </table>
         </div>
       </CardContent>
+      
+      <div className="px-6 pb-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
       
       <ImageModal
         isOpen={modalOpen}
