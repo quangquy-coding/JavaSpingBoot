@@ -9,7 +9,7 @@ import Pagination from "./Pagination";
 const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
   const [users, setUsers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState({ src: '', name: '' });
+  const [selectedImage, setSelectedImage] = useState({ src: "", name: "" });
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize] = useState(5);
@@ -60,7 +60,7 @@ const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
 
   const closeImageModal = () => {
     setModalOpen(false);
-    setSelectedImage({ src: '', name: '' });
+    setSelectedImage({ src: "", name: "" });
   };
 
   return (
@@ -82,56 +82,66 @@ const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
               </tr>
             </thead>
             <tbody>
-              {users && users.length > 0 ? users.map((user) => (
-                <tr key={user.id} className="border-b hover:bg-gray-50">
-                  <td className="p-4">
-                    <img 
-                      src={user.avatarUrl ? `http://localhost:8080${user.avatarUrl}` : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150"} 
-                      alt={user.name}
-                      className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
-                      onClick={() => openImageModal(
-                        user.avatarUrl ? `http://localhost:8080${user.avatarUrl}` : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
-                        user.name
-                      )}
-                    />
-                  </td>
-                  <td className="p-4">{user.id}</td>
-                  <td className="p-4">{user.name}</td>
-                  <td className="p-4">{user.email}</td>
-                  <td className="p-4">{user.phone}</td>
-                  <td className="p-4">
-                    <div className="flex gap-2">
-                      <Button size="sm" onClick={() => onEdit(user)}>
-                        <Pencil className="h-4 w-4 mr-1" />
-                        Sửa
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => deleteUser(user.id)}
-                        disabled={user.id <= 5}
-                        className={
-                          user.id <= 5 ? "opacity-50 cursor-not-allowed" : ""
+              {users && users.length > 0 ? (
+                users.map((user) => (
+                  <tr key={user.id} className="border-b hover:bg-gray-50">
+                    <td className="p-4">
+                      <img
+                        src={
+                          user.avatarUrl
+                            ? `http://localhost:8080${user.avatarUrl}`
+                            : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150"
                         }
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        {user.id <= 5 ? "Không thể xóa" : "Xóa"}
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              )) : (
+                        alt={user.name}
+                        className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() =>
+                          openImageModal(
+                            user.avatarUrl
+                              ? `http://localhost:8080${user.avatarUrl}`
+                              : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
+                            user.name
+                          )
+                        }
+                      />
+                    </td>
+                    <td className="p-4">{user.id}</td>
+                    <td className="p-4">{user.name}</td>
+                    <td className="p-4">{user.email}</td>
+                    <td className="p-4">{user.phone}</td>
+                    <td className="p-4">
+                      <div className="flex gap-2">
+                        <Button size="sm" onClick={() => onEdit(user)}>
+                          <Pencil className="h-4 w-4 mr-1" />
+                          Sửa
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => deleteUser(user.id)}
+                          disabled={user.id <= 5}
+                          className={
+                            user.id <= 5 ? "opacity-50 cursor-not-allowed" : ""
+                          }
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          {user.id <= 5 ? "Không thể xóa" : "Xóa"}
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
                   <td colSpan="6" className="p-4 text-center text-gray-500">
                     Không có dữ liệu
                   </td>
                 </tr>
-              )}}
+              )}
             </tbody>
           </table>
         </div>
       </CardContent>
-      
+
       <div className="px-6 pb-6">
         <Pagination
           currentPage={currentPage}
@@ -139,7 +149,7 @@ const UserList = ({ onEdit, onRefresh, onDelete, refresh }) => {
           onPageChange={handlePageChange}
         />
       </div>
-      
+
       <ImageModal
         isOpen={modalOpen}
         onClose={closeImageModal}
